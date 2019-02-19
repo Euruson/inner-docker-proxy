@@ -1,0 +1,2 @@
+forward-socks5 / privoxy:2087 .
+listen-address 0.0.0.0:8118

@@ -1,0 +1,44 @@
+version: '3'
+services:
+  sslibev:
+    image: teddysun/shadowsocks-libev:alpine
+    container_name: my-sslibev
+    restart: always
+    ports:
+      - "2087:2080"
+      - "2087:2080/udp"
+    volumes:
+      - ./sslibev:/etc/shadowsocks-libev
+    command: ss-local -c /etc/shadowsocks-libev/config.json
+  privoxy:
+    image: vimagick/privoxy
+    container_name: my-privoxy
+    ports:
+      - "8118:8118"
+    depends_on:
+      - sslibev
+    volumes:
+      - ./privoxy/:/etc/privoxy/
+    cap_add:
+      - NET_ADMIN
+    restart: always
+  transmission:
+    image: linuxserver/transmission
+    container_name: transmission
+    depends_on:
+      - privoxy
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Asia/Shanghai
+      - http_proxy=http://privoxy:8118
+      - HTTP_PROXY=http://privoxy:8118
+      - https_proxy=http://privoxy:8118
+      - HTTPS_PROXY=http://privoxy:8118
+      - all_proxy=http://privoxy:8118
+      - ALL_PROXY=http://privoxy:8118
+    ports:
+      - 9091:9091
+      - 51413:51413
+      - 51413:51413/udp
+    restart: unless-stopped
