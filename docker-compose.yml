@@ -4,17 +4,12 @@ services:
     image: teddysun/shadowsocks-libev:alpine
     container_name: my-sslibev
     restart: always
-    ports:
-      - "2087:2080"
-      - "2087:2080/udp"
     volumes:
       - ./sslibev:/etc/shadowsocks-libev
     command: ss-local -c /etc/shadowsocks-libev/config.json
   privoxy:
     image: vimagick/privoxy
     container_name: my-privoxy
-    ports:
-      - "8118:8118"
     depends_on:
       - sslibev
     volumes:
