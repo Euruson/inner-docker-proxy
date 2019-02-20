@@ -1,1 +1,4 @@
 sslibev/config.json
+downloads/
+transmission/*
+!transmission/settings.json

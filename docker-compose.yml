@@ -22,6 +22,9 @@ services:
     container_name: transmission
     depends_on:
       - privoxy
+    volumes:
+      - ./transmission:/config
+      - ./downloads:/downloads
     environment:
       - PUID=1000
       - PGID=1000
